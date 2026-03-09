@@ -1,0 +1,34 @@
+[
+    {
+        "subject_name": "Optical Fiber Communication (OFC)",
+        "faculty_name": "Prof. Alok Kumar-I (AK-I)"
+    },
+    {
+        "subject_name": "GATE / IES",
+        "faculty_name": "All Faculty of ECE Department (I/C: Prof. Md. Itekhar Alam)"
+    },
+    {
+        "subject_name": "Cost Management (CM)",
+        "faculty_name": "Prof. Akash Kumar (AK)"
+    },
+    {
+        "subject_name": "Business Analytics (BA)",
+        "faculty_name": "Prof. Akash Kumar (AK)"
+    },
+    {
+        "subject_name": "Wireless Communication (WC)",
+        "faculty_name": "Prof. Alok Kumar-II (AK-II)"
+    },
+    {
+        "subject_name": "Very Large Scale Integration (VLSI) Technology",
+        "faculty_name": "Prof. Amit Kumar Keshari (AKK) & Dr. Prashant Mani (PM)"
+    },
+    {
+        "subject_name": "Summer Entrepreneurship (SE-III)",
+        "faculty_name": "All Faculty of ECE Department (I/C: Prof. Pinki Kumari)"
+    },
+    {
+        "subject_name": "Project-I",
+        "faculty_name": "All Faculty of ECE Department (Project I/C: Prof. Krishnakant Chaubey)"
+    }
+]

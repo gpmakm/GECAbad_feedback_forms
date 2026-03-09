@@ -1,0 +1,41 @@
+[
+    {
+        "id":1,
+        "question":"Punctuality in the Class?"
+    },
+    {
+        "id":2,
+        "question":"Completes syllabus of the course on time?"
+    },
+    {
+        "id":3,
+        "question":"Scheduled organization of assignments, class test, quizzes and seminars?"
+    },
+    {
+        "id":4,
+        "question":"Communication skills of  faculty?"
+    },
+    {
+        "id":5,
+        "question":"While Teaching whether he/she uses multimedia tools ( PPT, Video, etc)?"
+    },
+    {
+        "id":6,
+        "question":"Skill of linking subject to life experience & creating interest in the subject?"
+    },
+    {
+        "id":7,
+        "question":"Whether he/she uses simulation software/ tools to explain concepts?"
+    },
+    {
+        "id":8,
+        "question":"Refers to latest developments in the subject?"
+    },
+    {
+        "id":9,"question":"Helps students in realizing career goals?"
+    }
+    ,{
+        "id":10,
+        "question":"Whether he/she promotes discussion environment in the form of question answer in the classroom?"
+    }
+]

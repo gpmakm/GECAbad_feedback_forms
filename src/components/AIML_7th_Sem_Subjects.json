@@ -1,0 +1,26 @@
+[
+    {
+        "subject_name": "Natural Language Processing (NLP)",
+        "faculty_name": "Prof. Nidhi Kumari"
+    },
+    {
+        "subject_name": "Biology for Engineers (BE)",
+        "faculty_name": "Dr. Rakesh Roushan"
+    },
+    {
+        "subject_name": "Internet of Things (IOT)",
+        "faculty_name": "Prof. Chandan Kumar"
+    },
+    {
+        "subject_name": "Soft Skill and Interpersonal Communication (SSIC)",
+        "faculty_name": "Prof. Avenash Kumar"
+    },
+    {
+        "subject_name": "Summer Entrepreneurship-III",
+        "faculty_name": "Prof. Sushil Kumar"
+    },
+    {
+        "subject_name": "Project-I",
+        "faculty_name": "Prof. Avenash Kumar"
+    }
+]

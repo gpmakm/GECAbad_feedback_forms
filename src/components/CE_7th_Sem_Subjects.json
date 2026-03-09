@@ -1,0 +1,27 @@
+[
+    {
+        "id":101,
+        "subject_name": "GATE, IES",
+        "faculty_name": "All CE Faculties"
+    },
+    {
+        "id":102,
+        "subject_name": "Professional Practice, Law & Ethics",
+        "faculty_name": "Prof. Akash Kumar"
+    },
+    {
+        "id":103,
+        "subject_name": "Foundation Engineering",
+        "faculty_name": "Prof. Om Prakash Vats"
+    },
+    {
+        "id":104,
+        "subject_name": "Soft Skill and Interpersonal Communication",
+        "faculty_name": "Prof. Jitendra Kumar"
+    },
+    {
+        "id":105,
+        "subject_name": "Concrete Technology",
+        "faculty_name": "Prof. Dharmendra Kumar"
+    }
+]
