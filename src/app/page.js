@@ -16,7 +16,7 @@ export default function Home() {
   const [regno,setRegno] = useState("")
   const [branch,setBranch] = useState("")
   const [semester,setSemester] = useState("")
-
+const [buttonText,setbuttonText]=useState("Submit feedback")
   const [marks,setMarks] = useState([])
 
   const subjects =
@@ -47,6 +47,7 @@ export default function Home() {
   const handleSubmit = async(e)=>{
 
     e.preventDefault()
+    setbuttonText("Submitting...")
 
     const feedback = subjects.map((sub,i)=>({
 
@@ -64,7 +65,7 @@ export default function Home() {
       feedback
 
     }
-    console.log(data);
+    //console.log(data);
     
 
     try{
@@ -84,6 +85,7 @@ export default function Home() {
       console.log(response)
 
       alert("Feedback submitted successfully!")
+      setbuttonText("Submit feedback")
 
     }
 
@@ -216,7 +218,7 @@ export default function Home() {
           </div>
 
           <button type="submit">
-            Submit Feedback
+           {buttonText}
           </button>
 
         </main>
