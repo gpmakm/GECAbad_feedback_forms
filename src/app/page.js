@@ -85,7 +85,7 @@ const [buttonText,setbuttonText]=useState("Submit feedback")
       console.log(response)
 
       alert("Feedback submitted successfully!")
-      setbuttonText("Submit feedback")
+      
 
     }
 
@@ -100,7 +100,7 @@ const [buttonText,setbuttonText]=useState("Submit feedback")
     setBranch("")
     setSemester("")
     setMarks([])
-
+setbuttonText("Submit feedback")
   }
 
   return(

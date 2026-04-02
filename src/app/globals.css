@@ -246,7 +246,64 @@ input,select{
   top:0;
   z-index:100;
 }
+/* Container */
+.branch-container {
+  margin-bottom: 40px;
+}
 
+/* Table Styling */
+.styled-table {
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  width: 100%;
+  min-width: 400px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Header */
+.styled-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  font-weight: bold;
+}
+
+/* Cells */
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+}
+
+/* Rows */
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+/* Alternate row color */
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+/* Hover effect */
+.styled-table tbody tr:hover {
+  background-color: #d1f7ef;
+  transition: 0.2s;
+}
+
+/* Last row border */
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+/* No data row */
+.styled-table td[colspan="3"] {
+  text-align: center;
+  font-weight: bold;
+  color: #777;
+}
 .navContainer{
   width:90%;
   max-width:1100px;

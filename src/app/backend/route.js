@@ -21,6 +21,21 @@ async function connecttoDB() {
   }
 }
 
+export async function GET(req) {
+  
+  try {
+    await connecttoDB();
+    const student_feedback_me=await me_student.find({});
+    const student_feedback_ce=await ce_student.find({});
+    const student_feedback_ee=await ee_student.find({});
+    const student_feedback_ece=await ece_student.find({});
+    const student_feedback_cseaiml=await cse_aiml_student.find({});
+    return NextResponse.json({message:"Data found!!",cse_aiml:student_feedback_cseaiml,ee:student_feedback_ee,ece:student_feedback_ece,ce:student_feedback_ce,me:student_feedback_me})
+  } catch (error) {
+    return NextResponse.json({message:"Error caught "+error,status:500})
+  }
+}
+
 export async function POST(request) {
   try {
     await connecttoDB();
@@ -52,6 +67,6 @@ export async function POST(request) {
 
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: "Found error"+error.message }, { status: 500 });
   }
 }
