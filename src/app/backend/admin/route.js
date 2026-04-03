@@ -1,35 +1,37 @@
-
-
+import { NextResponse } from "next/server";
 
 export async function POST(req) {
-
   try {
+    const body = await req.json();
+    const { username, password } = body;
 
-    const body = await req.json()
+    if (password === process.env.USER_PASSWORD) {
 
-    const { username, password } = body
-
-    if (password === "admin@ff12345") {
-
-      return Response.json({
+      const response = NextResponse.json({
         success: true,
         message: "Login successful"
-      })
+      });
 
+      response.cookies.set("admin_auth", "true", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 60 * 60 * 3,
+        path: "/"
+      });
+
+      return response; 
     }
 
-    return Response.json({
+   
+    return NextResponse.json({
       success: false,
-      message: "Invalid username or password"
-    })
+      message: "Invalid credentials"
+    }, { status: 401 });
 
   } catch (error) {
-
-    return Response.json({
+    return NextResponse.json({
       success: false,
-      message: "Server error"+error.message
-    })
-
+      message: "Server error " + error.message
+    });
   }
-
 }

@@ -17,8 +17,9 @@ export default function RootLayout({ children }) {
   <div className="navContainer">
     <h2 className="navTitle"> Semester Feedback form</h2>
   </div>
-  <ul className="navLinks">
-    <li><a href="/admin" style={{ color: 'white',textDecoration:'none',listStyleType:'none' }}>Admin</a></li>
+  <ul className="navLinks" style={{display:'flex', gap:8,listStyleType:'none'}}>
+    <li><a href="/admin" style={{ color: 'white',textDecoration:'none',listStyleType:'none', margin:8 }}>Admin</a></li>
+    <li><a href="/logout" style={{ color: 'white',textDecoration:'none',listStyleType:'none', margin:8 }}>Logout</a></li>
    
   </ul>
 </nav>
