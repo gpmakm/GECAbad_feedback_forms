@@ -170,7 +170,10 @@ setbuttonText("Submit feedback")
 
                 <h3 className="subjectTitle">
                   {sub.subject_name}
+                  <br/>
+                    <p>By {sub.faculty_name}</p>
                 </h3>
+              
 
                 <div className="ratingHeader">
 
