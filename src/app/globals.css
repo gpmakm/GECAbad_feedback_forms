@@ -297,6 +297,41 @@ input,select{
 .styled-table tbody tr:last-of-type {
   border-bottom: 2px solid #009879;
 }
+.faculty-reg-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.faculty-reg-form {
+  width: 300px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.faculty-reg-title {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.faculty-reg-input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.faculty-reg-button {
+  width: 100%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.faculty-reg-error {
+  color: red;
+  font-size: 12px;
+}
 
 /* No data row */
 .styled-table td[colspan="3"] {

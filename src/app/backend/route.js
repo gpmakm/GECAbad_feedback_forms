@@ -20,6 +20,52 @@ async function connecttoDB() {
     await mongoose.connect(process.env.NEXT_PUBLIC_DB_URL);
   }
 }
+ const models = [
+  { name: "cse_aiml", model: cse_aiml_student },
+  { name: "ee", model: ee_student },
+  { name: "ece", model: ece_student },
+  { name: "ce", model: ce_student },
+  { name: "me", model: me_student }
+];
+
+const getStorageInfo = async () => {
+  try {
+    const results = await Promise.all(
+      models.map(async ({ name, model }) => {
+        const res = await model.aggregate([
+          {
+            $group: {
+              _id: null,
+              totalSize: { $sum: { $bsonSize: "$$ROOT" } },
+              count: { $sum: 1 }
+            }
+          }
+        ]);
+
+        return {
+          name,
+          size: res[0]?.totalSize || 0,
+          count: res[0]?.count || 0
+        };
+      })
+    );
+
+    // 🔥 combine totals
+    const totalSizeBytes = results.reduce((sum, r) => sum + r.size, 0);
+    const totalDocs = results.reduce((sum, r) => sum + r.count, 0);
+
+    return {
+      collections: results,
+      totalDocuments: totalDocs,
+      totalSizeBytes,
+      totalSizeMB: (totalSizeBytes / (1024 * 1024)).toFixed(2)
+    };
+
+  } catch (error) {
+    console.error("Error getting storage info:", error);
+    return null;
+  }
+};
 
 export async function GET(req) {
   
@@ -39,6 +85,7 @@ export async function GET(req) {
 export async function POST(request) {
   try {
     await connecttoDB();
+
     const data = await request.json();
 
     let user_feedback;
@@ -63,6 +110,15 @@ export async function POST(request) {
     }
 
     await user_feedback.save();
+   
+const stats = await getStorageInfo();
+
+console.log(stats);
+
+
+// ✅ universal solution
+
+
     return NextResponse.json({ message: "Data saved successfully" }, { status: 200 });
 
   } catch (error) {
@@ -70,3 +126,4 @@ export async function POST(request) {
     return NextResponse.json({ error: "Found error"+error.message }, { status: 500 });
   }
 }
+module.exports={cse_aiml_student,ee_student,ece_student,ce_student,me_student}

@@ -22,6 +22,8 @@ export default function Dashboard() {
     fetchDetails();
   }, []);
 
+
+
   // ✅ Average calculation
   const calculateSubjectAverages = (branchData) => {
     const subjectMap = {};
@@ -97,6 +99,9 @@ export default function Dashboard() {
       {/* 🔥 Export Button */}
       <button className="btn" onClick={downloadPDF}>
         Export as PDF
+      </button>
+      <button className="btn" style={{backgroundColor:'red'}}>
+        Export and Clear database
       </button>
 
       {/* 🔥 CONTENT TO EXPORT */}
