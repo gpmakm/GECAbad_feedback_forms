@@ -12,7 +12,7 @@ export async function POST(req) {
         message: "Login successful"
       });
 
-      response.cookies.set("admin_auth", "true", {
+      response.cookies.set(process.env.AUTH_TOKEN, "true", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         maxAge: 60 * 60 * 3,

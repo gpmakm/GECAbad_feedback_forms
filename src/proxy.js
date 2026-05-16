@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export function proxy(req) {
-    const session = req.cookies.get("admin_auth");
+    const session = req.cookies.get(process.env.AUTH_TOKEN);
 
     const protectedRoutes = ["/dashboard"];
 
