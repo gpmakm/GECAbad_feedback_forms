@@ -94,7 +94,7 @@ export default function Dashboard() {
     <div className="container">
 
       <h1>Admin Dashboard</h1>
-      <p>Welcome Admin</p>
+      <p>Welcome Professor</p>
 
       {/* 🔥 Export Button */}
       <button className="btn" onClick={downloadPDF}>
