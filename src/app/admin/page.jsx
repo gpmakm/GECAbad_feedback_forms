@@ -37,7 +37,7 @@ export default function Login() {
 
         alert("Login Successful")
 
-        window.location.href="/dashboard"
+        router.push("/dashboard?admin=" + data.admin)
 
       } else {
 

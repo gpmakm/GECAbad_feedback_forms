@@ -2,9 +2,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
-
+import { useSearchParams } from 'next/navigation'
 export default function Dashboard() {
 
+const searchParams = useSearchParams();
+const adminName = searchParams.get("admin") || "Admin";
   const [data, setData] = useState({});
   const pdfRef = useRef(); // 🔥 reference for PDF
 
@@ -94,7 +96,7 @@ export default function Dashboard() {
     <div className="container">
 
       <h1>Admin Dashboard</h1>
-      <p>Welcome Professor</p>
+      <p>Welcome, {adminName}!</p>
 
       {/* 🔥 Export Button */}
       <button className="btn" onClick={downloadPDF}>

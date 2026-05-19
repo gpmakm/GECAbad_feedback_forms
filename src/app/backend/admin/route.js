@@ -1,3 +1,4 @@
+import { Admin } from "mongodb";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -8,6 +9,7 @@ export async function POST(req) {
     if (password === process.env.USER_PASSWORD) {
 
       const response = NextResponse.json({
+        admin: username,
         success: true,
         message: "Login successful"
       });
