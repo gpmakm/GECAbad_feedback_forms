@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 
 const formSchema = new mongoose.Schema({
-  username: String,
-  regno: String,
+  // username: String,
+  // regno: String,
   branch: String,
   semester: String,
   feedback: Array,
@@ -14,6 +14,7 @@ const ee_student = mongoose.models.ee_student || mongoose.model("ee_student", fo
 const ece_student = mongoose.models.ece_student || mongoose.model("ece_student", formSchema);
 const ce_student = mongoose.models.ce_student || mongoose.model("ce_student", formSchema);
 const me_student = mongoose.models.me_student || mongoose.model("me_student", formSchema);
+const ds_student = mongoose.models.ds_student || mongoose.model("ds_student", formSchema);
 
 async function connecttoDB() {
   if (mongoose.connection.readyState < 1) {
@@ -25,7 +26,8 @@ async function connecttoDB() {
   { name: "ee", model: ee_student },
   { name: "ece", model: ece_student },
   { name: "ce", model: ce_student },
-  { name: "me", model: me_student }
+  { name: "me", model: me_student },
+   { name: "ds", model: ds_student }
 ];
 
 const getStorageInfo = async () => {
@@ -104,6 +106,9 @@ export async function POST(request) {
         break;
       case "EE":
         user_feedback = new ee_student(data);
+        break;
+        case "DS":
+        user_feedback = new ds_student(data);
         break;
       default:
         return NextResponse.json({ error: "Invalid branch" }, { status: 400 });

@@ -1,0 +1,22 @@
+[
+    {
+        "subject_name": "Data Vusalization (DV)",
+        "faculty_name": "Prof. Nidhi Kumari"
+    },
+    {
+        "subject_name": "Big Data and tools (BD & T)",
+        "faculty_name": "Dr. Pramod Kumar"
+    },
+    {
+        "subject_name": "Image & Video Processing(IV &P)",
+        "faculty_name": "Prof. Akash Kumar"
+    },
+    {
+        "subject_name": "Network Security(NS)",
+        "faculty_name": "Prof. Raju Ranjan Kumar"
+    },
+    {
+        "subject_name": "AI & Ethics",
+        "faculty_name": "Prof. Nidhi Kumari"
+    }
+]

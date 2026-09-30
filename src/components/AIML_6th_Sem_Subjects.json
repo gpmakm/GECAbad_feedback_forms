@@ -1,0 +1,38 @@
+[
+  {
+    "subject_name": "Automata Theory and Compiler Design (AT&CD)",
+    "faculty_name": "Prof. Pramod Kumar"
+  },
+  {
+    "subject_name": "Ad hoc & Network Sensors (Ad&NS)",
+    "faculty_name": "Prof. Avenash Kumar"
+  },
+  {
+    "subject_name": "Python Programming",
+    "faculty_name": "Prof. Nidhi Kumari"
+  },
+  {
+    "subject_name": "Cryptography (CGY)",
+    "faculty_name": "Prof. Sushil Kumar"
+  },
+  {
+    "subject_name": "AI and Ethics (AI&E)",
+    "faculty_name": "Prof. Nidhi Kumari"
+  },
+  {
+    "subject_name": "Constitution of India (COI)",
+    "faculty_name": "Prof. Akash Kumar"
+  },
+  {
+    "subject_name": "Ad&NS Lab",
+    "faculty_name": "Prof. Avenash Kumar, Dr. Pramod Kumar & Mr. Nitish Kumar"
+  },
+  {
+    "subject_name": "Python Lab",
+    "faculty_name": "Prof. Nidhi Kumari, Prof. Akash Kumar & Mrs. Kumari Alka"
+  },
+  {
+    "subject_name": "NPTEL-II Lab",
+    "faculty_name": "Prof. Chandan Kumar & Mr. Nitish Kumar"
+  }
+]

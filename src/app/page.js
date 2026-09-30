@@ -8,12 +8,14 @@ import ce_subjects from "../components/CE_7th_Sem_Subjects.json"
 import cse_subjects from "../components/AIML_7th_Sem_Subjects.json"
 import ece_subjects from "../components/ECE_7th_Sem_Subjects.json"
 import me_subjects from "../components/ME_7th_Sem_Subjects.json"
+import ds_subjects from "../components/DS_6th_Sem_Subjects.json"
 import Image from "next/image"
+import ai_subjects from "../components/AIML_6th_Sem_Subjects.json"
 
 export default function Home() {
 
-  const [username,setUsername] = useState("")
-  const [regno,setRegno] = useState("")
+  // const [username,setUsername] = useState("")
+  // const [regno,setRegno] = useState("")
   const [branch,setBranch] = useState("")
   const [semester,setSemester] = useState("")
 const [buttonText,setbuttonText]=useState("Submit feedback")
@@ -28,6 +30,10 @@ const [buttonText,setbuttonText]=useState("Submit feedback")
       ? cse_subjects
       : branch === "ME"
       ? me_subjects
+      : branch==="DS" 
+      ? ds_subjects
+      : branch==="CSE(AIML)"
+      ? ai_subjects
       : []
 
   const handleAdd = (value,subjectIndex,questionIndex) => {
@@ -58,8 +64,8 @@ const [buttonText,setbuttonText]=useState("Submit feedback")
 
     const data = {
 
-      username,
-      regno,
+      // username,
+      // regno,
       branch,
       semester,
       feedback
@@ -122,21 +128,6 @@ setbuttonText("Submit feedback")
 
         <main className={styles.main}>
 
-          <input
-          type="text"
-          value={username}
-          placeholder="Enter your name"
-          onChange={(e)=>setUsername(e.target.value)}
-          required
-          />
-
-          <input
-          type="number"
-          value={regno}
-          placeholder="Enter registration number"
-          onChange={(e)=>setRegno(e.target.value)}
-          required
-          />
 
           <select
           value={branch}
@@ -148,6 +139,7 @@ setbuttonText("Submit feedback")
             <option value="CSE(AIML)">CSE (AIML)</option>
             <option value="ECE">ECE</option>
             <option value="CE">Civil Engineering</option>
+            <option value="DS">CSE(DS)</option>
             <option value="ME">Mechanical Engineering</option>
           </select>
 
@@ -158,7 +150,7 @@ setbuttonText("Submit feedback")
           >
 
             <option value="">Choose semester</option>
-            <option value="7">7th Semester</option>
+            <option value="6">6th Semester</option>
 
           </select>
 
