@@ -26,8 +26,7 @@ const [buttonText,setbuttonText]=useState("Submit feedback")
       ? ce_subjects
       : branch === "ECE"
       ? ece_subjects
-      : branch === "CSE(AIML)"
-      ? cse_subjects
+      
       : branch === "ME"
       ? me_subjects
       : branch==="DS" 
