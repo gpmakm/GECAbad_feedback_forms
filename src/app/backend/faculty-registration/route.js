@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import mongoose from "mongoose"
-import connecttoDB from '../route'
+
 async function connecttoDB() {
   if (mongoose.connection.readyState < 1) {
     await mongoose.connect(process.env.NEXT_PUBLIC_DB_URL);
