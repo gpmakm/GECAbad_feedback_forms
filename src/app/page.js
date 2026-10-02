@@ -97,11 +97,10 @@ const [buttonText,setbuttonText]=useState("Submit feedback")
     catch(err){
 
       console.error(err)
-      alert("Submission failed")
+      alert("Submission failed"+err.message)
 
     }
-    setUsername("")
-    setRegno("")
+    
     setBranch("")
     setSemester("")
     setMarks([])

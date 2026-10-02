@@ -1,6 +1,6 @@
-import { Admin } from "mongodb";
+
 import { NextResponse } from "next/server";
-import connecttoDB from '../routes/connecttoDB'
+import connecttoDB from '../route'
 export async function POST(req) {
   try {
     const body = await req.json();

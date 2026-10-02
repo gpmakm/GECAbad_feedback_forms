@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
+import mongoose from "mongoose"
 
 const formSchema = new mongoose.Schema({
   // username: String,
@@ -16,9 +16,13 @@ const ce_student = mongoose.models.ce_student || mongoose.model("ce_student", fo
 const me_student = mongoose.models.me_student || mongoose.model("me_student", formSchema);
 const ds_student = mongoose.models.ds_student || mongoose.model("ds_student", formSchema);
 
-async function connecttoDB() {
+export default async function connecttoDB() {
   if (mongoose.connection.readyState < 1) {
-    await mongoose.connect(process.env.NEXT_PUBLIC_DB_URL);
+    try{
+await mongoose.connect(process.env.NEXT_PUBLIC_DB_URL);
+    } catch(err){
+      console.log(err)
+    }
   }
 }
  const models = [
