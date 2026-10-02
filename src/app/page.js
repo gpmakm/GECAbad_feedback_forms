@@ -127,6 +127,17 @@ setbuttonText("Submit feedback")
         <main className={styles.main}>
 
 
+          
+          <select
+          value={semester}
+          onChange={(e)=>setSemester(e.target.value)}
+          required
+          >
+
+            <option value="">Choose semester</option>
+            <option value="6">6th Semester</option>
+
+          </select>
           <select
           value={branch}
           onChange={(e)=>setBranch(e.target.value)}
@@ -141,16 +152,6 @@ setbuttonText("Submit feedback")
             <option value="ME">Mechanical Engineering</option>
           </select>
 
-          <select
-          value={semester}
-          onChange={(e)=>setSemester(e.target.value)}
-          required
-          >
-
-            <option value="">Choose semester</option>
-            <option value="6">6th Semester</option>
-
-          </select>
 
           <div className="questionsSection">
 
