@@ -28,7 +28,7 @@ export  async function POST(req) {
         process.env.AUTH_TOKEN,
         "true",
         {
-          httpOnly:false,
+          httpOnly:true,
           secure: process.env.NODE_ENV==="production",
           maxAge: 60*60*24,
           path:"/"
