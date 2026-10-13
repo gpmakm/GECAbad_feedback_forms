@@ -11,6 +11,7 @@ const Page = () => {
   });
 
   const [error, setError] = useState("");
+  const [buttontext, setButtonText] = useState("Register");
 
   const handleChange = (e) => {
     setFormData({
@@ -26,7 +27,22 @@ const Page = () => {
       setError("Passwords do not match");
       return;
     }
+    setButtonText("Registering...");
+    fetch("/backend/faculty-registration", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
 
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+setButtonText("Register");
     setError("");
     console.log("Form Data:", formData);
   };
@@ -79,7 +95,7 @@ const Page = () => {
         {error && <p className="faculty-reg-error">{error}</p>}
 
         <button type="submit" className="faculty-reg-button">
-          Register
+          {buttontext}
         </button>
       </form>
     </div>

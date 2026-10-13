@@ -11,6 +11,7 @@ export default function Login() {
   const [password, setPassword] = useState("")
 
   const handleLogin = async (e) => {
+    let regno=username;
 
     e.preventDefault()
 
@@ -25,13 +26,13 @@ export default function Login() {
         },
 
         body: JSON.stringify({
-          username,
+          regno,
           password
         })
 
       })
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (data.success) {
 
