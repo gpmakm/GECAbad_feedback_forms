@@ -81,8 +81,9 @@ export async function GET(req) {
     const student_feedback_ce=await ce_student.find({});
     const student_feedback_ee=await ee_student.find({});
     const student_feedback_ece=await ece_student.find({});
+    const student_feedback_ds=await ds_student.find({});
     const student_feedback_cseaiml=await cse_aiml_student.find({});
-    return NextResponse.json({message:"Data found!!",cse_aiml:student_feedback_cseaiml,ee:student_feedback_ee,ece:student_feedback_ece,ce:student_feedback_ce,me:student_feedback_me})
+    return NextResponse.json({message:"Data found!!",cse_aiml:student_feedback_cseaiml,ee:student_feedback_ee,ece:student_feedback_ece,ce:student_feedback_ce,me:student_feedback_me,ds:student_feedback_ds})
   } catch (error) {
     return NextResponse.json({message:"Error caught "+error,status:500})
   }

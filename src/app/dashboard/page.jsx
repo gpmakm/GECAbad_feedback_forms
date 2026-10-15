@@ -50,12 +50,7 @@ function DashboardContent() {
     let cancelled = false;
 
     async function fetchDetails() {
-      logDebug("Starting API request", {
-        endpoint: "/backend"
-      });
-
-      setLoading(true);
-      setApiError("");
+      
 
       try {
         const response = await fetch("/backend", {
@@ -66,11 +61,7 @@ function DashboardContent() {
           cache: "no-store"
         });
 
-        logDebug("API response received", {
-          status: response.status,
-          statusText: response.statusText,
-          contentType: response.headers.get("content-type")
-        });
+       
 
         if (!response.ok) {
           const responseText = await response.text();
@@ -243,10 +234,7 @@ function DashboardContent() {
         throw new Error("Canvas has zero width or height.");
       }
 
-      logDebug("Canvas created", {
-        width: canvas.width,
-        height: canvas.height
-      });
+     
 
       const { jsPDF } = await import("jspdf");
 
