@@ -1,138 +1,385 @@
-"use client"
-import React, { useState, useEffect, useRef } from 'react'
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
-import { useSearchParams } from 'next/navigation'
-export default function Dashboard() {
+"use client";
 
-const searchParams = useSearchParams();
-const adminName = searchParams.get("admin") || "Admin";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  Suspense
+} from "react";
+
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import { useSearchParams } from "next/navigation";
+
+function DashboardContent() {
+  const searchParams = useSearchParams();
+  const adminName = searchParams.get("admin") || "Admin";
+
   const [data, setData] = useState({});
-  const pdfRef = useRef(); // 🔥 reference for PDF
+  const [loading, setLoading] = useState(true);
+  const [apiError, setApiError] = useState("");
+  const [pdfStatus, setPdfStatus] = useState("Not started");
+  const [debugLogs, setDebugLogs] = useState([]);
 
-  useEffect(() => {
-    const fetchDetails = async () => {
-      try {
-        const resp = await fetch('/backend');
-        const final_data = await resp.json();
-        setData(final_data);
-      } catch (err) {
-        console.log("Error:", err);
+  const pdfRef = useRef(null);
+
+  // Record diagnostics in the browser console and on screen.
+  const logDebug = (message, details = null) => {
+    const timestamp = new Date().toLocaleTimeString();
+
+    console.log(`[Dashboard ${timestamp}] ${message}`, details ?? "");
+
+    setDebugLogs((previous) => [
+      ...previous,
+      {
+        id: `${Date.now()}-${previous.length}`,
+        timestamp,
+        message,
+        details:
+          details === null
+            ? ""
+            : typeof details === "string"
+              ? details
+              : JSON.stringify(details, null, 2)
       }
-    };
+    ].slice(-30));
+  };
+
+  // Fetch feedback from the backend.
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchDetails() {
+      logDebug("Starting API request", {
+        endpoint: "/backend"
+      });
+
+      setLoading(true);
+      setApiError("");
+
+      try {
+        const response = await fetch("/backend", {
+          method: "GET",
+          headers: {
+            Accept: "application/json"
+          },
+          cache: "no-store"
+        });
+
+        logDebug("API response received", {
+          status: response.status,
+          statusText: response.statusText,
+          contentType: response.headers.get("content-type")
+        });
+
+        if (!response.ok) {
+          const responseText = await response.text();
+
+          throw new Error(
+            `API returned HTTP ${response.status}. ` +
+            `Response: ${responseText.slice(0, 500)}`
+          );
+        }
+
+        const contentType =
+          response.headers.get("content-type") || "";
+
+        if (!contentType.includes("application/json")) {
+          const responseText = await response.text();
+
+          throw new Error(
+            "Expected JSON but received a different response. " +
+            `Response preview: ${responseText.slice(0, 300)}`
+          );
+        }
+
+        const result = await response.json();
+
+        if (
+          result === null ||
+          typeof result !== "object" ||
+          Array.isArray(result)
+        ) {
+          throw new Error(
+            "Invalid API data. Expected a JSON object keyed by branch."
+          );
+        }
+
+        if (!cancelled) {
+          setData(result);
+
+          logDebug("API data loaded successfully", {
+            branchKeys: Object.keys(result),
+            branchCount: Object.keys(result).length
+          });
+        }
+      } catch (error) {
+        console.error("Dashboard API error:", error);
+
+        if (!cancelled) {
+          setApiError(
+            error instanceof Error
+              ? error.message
+              : String(error)
+          );
+
+          logDebug("API request failed", {
+            message:
+              error instanceof Error
+                ? error.message
+                : String(error)
+          });
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
 
     fetchDetails();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-
-
-  // ✅ Average calculation
+  // Safely calculate average ratings.
   const calculateSubjectAverages = (branchData) => {
     const subjectMap = {};
 
     const users = Array.isArray(branchData)
       ? branchData
-      : [branchData];
+      : branchData && typeof branchData === "object"
+        ? [branchData]
+        : [];
 
-    users.forEach(user => {
-      user?.feedback?.forEach(item => {
+    users.forEach((user, userIndex) => {
+      if (!user || typeof user !== "object") {
+        console.warn("Invalid user entry:", userIndex, user);
+        return;
+      }
 
-        if (!subjectMap[item.subject]) {
-          subjectMap[item.subject] = [];
+      const feedback = Array.isArray(user.feedback)
+        ? user.feedback
+        : [];
+
+      feedback.forEach((item) => {
+        if (!item || typeof item !== "object") {
+          console.warn("Invalid feedback entry:", item);
+          return;
         }
 
-        subjectMap[item.subject].push(...(item.ratings || []));
+        const subject = item.subject;
+
+        if (!subject) {
+          console.warn("Feedback entry has no subject:", item);
+          return;
+        }
+
+        if (!subjectMap[subject]) {
+          subjectMap[subject] = [];
+        }
+
+        const ratings = Array.isArray(item.ratings)
+          ? item.ratings
+          : [];
+
+        ratings.forEach((rating) => {
+          const numericRating = Number(rating);
+
+          if (
+            rating !== null &&
+            rating !== "" &&
+            Number.isFinite(numericRating)
+          ) {
+            subjectMap[subject].push(numericRating);
+          }
+        });
       });
     });
 
-    return Object.keys(subjectMap).map(subject => {
-      const ratings = subjectMap[subject];
-
-      const avg = ratings.length
-        ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(2)
-        : "No Ratings";
-
-      return {
+    return Object.entries(subjectMap).map(
+      ([subject, ratings]) => ({
         subject,
-        avg,
+        avg: ratings.length
+          ? (
+              ratings.reduce((sum, rating) => sum + rating, 0) /
+              ratings.length
+            ).toFixed(2)
+          : "No Ratings",
         totalRatings: ratings.length
-      };
-    });
+      })
+    );
   };
 
-  // ✅ PDF FUNCTION
+  // Export the dashboard as PDF.
   const downloadPDF = async () => {
+    logDebug("PDF export started");
+
     const element = pdfRef.current;
 
-    const canvas = await html2canvas(element, {
-      scale: 2
-    });
+    if (!element) {
+      const message = "PDF element not found in the page.";
 
-    const imgData = canvas.toDataURL("image/png");
-
-    const pdf = new jsPDF("p", "mm", "a4");
-
-    const imgWidth = 210;
-    const pageHeight = 295;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    let heightLeft = imgHeight;
-    let position = 0;
-
-    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-
-    while (heightLeft > 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+      setPdfStatus(message);
+      logDebug(message);
+      return;
     }
 
-    pdf.save("dashboard-report.pdf");
+    try {
+      setPdfStatus("Generating PDF...");
+
+      logDebug("Creating dashboard canvas");
+
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        logging: true
+      });
+
+      if (!canvas.width || !canvas.height) {
+        throw new Error("Canvas has zero width or height.");
+      }
+
+      logDebug("Canvas created", {
+        width: canvas.width,
+        height: canvas.height
+      });
+
+      const { jsPDF } = await import("jspdf");
+
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      const imageData = canvas.toDataURL("image/png");
+      const imageHeight =
+        (canvas.height * pageWidth) / canvas.width;
+
+      let heightLeft = imageHeight;
+      let position = 0;
+
+      pdf.addImage(
+        imageData,
+        "PNG",
+        0,
+        position,
+        pageWidth,
+        imageHeight
+      );
+
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imageHeight;
+
+        pdf.addPage();
+
+        pdf.addImage(
+          imageData,
+          "PNG",
+          0,
+          position,
+          pageWidth,
+          imageHeight
+        );
+
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save("dashboard-debug-report.pdf");
+
+      setPdfStatus("PDF exported successfully.");
+      logDebug("PDF saved successfully");
+    } catch (error) {
+      console.error("PDF export error:", error);
+
+      const message =
+        error instanceof Error
+          ? error.message
+          : String(error);
+
+      setPdfStatus(`PDF export failed: ${message}`);
+      logDebug("PDF export failed", message);
+    }
   };
 
   return (
-    <div className="container">
-
+    <main className="container">
       <h1>Admin Dashboard</h1>
+
       <p>Welcome, {adminName}!</p>
 
-      {/* 🔥 Export Button */}
-      <button className="btn" onClick={downloadPDF}>
-        Export as PDF
-      </button>
-      <button className="btn" style={{backgroundColor:'red'}}>
-        Export and Clear database
-      </button>
+      <div className="actions">
+        <button
+          className="btn"
+          onClick={downloadPDF}
+          disabled={loading || !!apiError}
+        >
+          Export as PDF
+        </button>
 
-      {/* 🔥 CONTENT TO EXPORT */}
-      <div ref={pdfRef}>
+        <button
+          className="btn clear-btn"
+          onClick={() =>
+            alert(
+              "Database deletion is disabled in debugging mode."
+            )
+          }
+        >
+          Export and Clear Database
+        </button>
+      </div>
 
-        {
-          Object.keys(data).map((branchKey, index) => {
+      
 
-            const branchData = data[branchKey];
-            const subjects = calculateSubjectAverages(branchData);
+      {/* Content captured in the PDF */}
+      {!loading && !apiError && (
+        <div ref={pdfRef} className="pdf-content">
+          <h2>Feedback Report</h2>
+          <p>Prepared for: {adminName}</p>
 
-            return (
-              <div key={index} className="branch-container">
-                <h2>{branchKey.toUpperCase()}</h2>
+          {Object.keys(data).length === 0 && (
+            <p>No feedback data available.</p>
+          )}
 
-                <table className="styled-table">
-                  <thead>
-                    <tr>
-                      <th>Subject</th>
-                      <th>Total Ratings</th>
-                      <th>Average Rating</th>
-                    </tr>
-                  </thead>
+          {Object.entries(data).map(
+            ([branchKey, branchData]) => {
+              let subjects = [];
 
-                  <tbody>
-                    {
-                      subjects.length > 0 ? (
-                        subjects.map((item, i) => (
-                          <tr key={i}>
+              try {
+                subjects =
+                  calculateSubjectAverages(branchData);
+              } catch (error) {
+                console.error(
+                  `Failed to calculate averages for ${branchKey}:`,
+                  error
+                );
+              }
+
+              return (
+                <section
+                  key={branchKey}
+                  className="branch-container"
+                >
+                  <h3>{branchKey.toUpperCase()}</h3>
+
+                  <table className="styled-table">
+                    <thead>
+                      <tr>
+                        <th>Subject</th>
+                        <th>Total Ratings</th>
+                        <th>Average Rating</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {subjects.length ? (
+                        subjects.map((item) => (
+                          <tr key={item.subject}>
                             <td>{item.subject}</td>
                             <td>{item.totalRatings}</td>
                             <td>{item.avg}</td>
@@ -140,54 +387,91 @@ const adminName = searchParams.get("admin") || "Admin";
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="3">No Data Available</td>
+                          <td colSpan={3}>
+                            No Data Available
+                          </td>
                         </tr>
-                      )
-                    }
-                  </tbody>
-                </table>
-              </div>
-            );
-          })
-        }
+                      )}
+                    </tbody>
+                  </table>
+                </section>
+              );
+            }
+          )}
+        </div>
+      )}
 
-      </div>
+      {loading && <p>Loading feedback data...</p>}
 
-      {/* ✅ STYLING */}
+     
+
       <style jsx>{`
         .container {
-          padding: 40px;
-          font-family: Arial;
+          padding: 30px;
+          font-family: Arial, sans-serif;
+          color: #222;
+        }
+
+        .actions,
+        .log-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin: 18px 0;
         }
 
         .btn {
-          margin: 20px 0;
-          padding: 10px 20px;
+          padding: 10px 16px;
+          border: none;
+          border-radius: 5px;
           background: #009879;
           color: white;
-          border: none;
           cursor: pointer;
-          border-radius: 5px;
         }
 
         .btn:hover {
           background: #007f67;
         }
 
+        .btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .clear-btn {
+          background: #dc2626;
+        }
+
+        .debug-panel {
+          margin: 20px 0;
+          padding: 16px;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          background: #f8fafc;
+          overflow-wrap: anywhere;
+        }
+
+        .pdf-content {
+          padding: 20px;
+          background: white;
+          color: #222;
+        }
+
         .branch-container {
-          margin-bottom: 40px;
+          margin-bottom: 35px;
         }
 
         .styled-table {
-          border-collapse: collapse;
           width: 100%;
+          border-collapse: collapse;
           margin-top: 10px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .styled-table th,
         .styled-table td {
           padding: 10px;
+          border: 1px solid #ddd;
+          text-align: left;
         }
 
         .styled-table thead {
@@ -199,10 +483,43 @@ const adminName = searchParams.get("admin") || "Admin";
           background: #f3f3f3;
         }
 
-        .styled-table tbody tr:hover {
-          background: #d1f7ef;
+        .error {
+          color: #b91c1c;
+          white-space: pre-wrap;
+          overflow-wrap: anywhere;
+        }
+
+        .log-entry {
+          padding: 10px 0;
+          border-bottom: 1px solid #ddd;
+        }
+
+        .log-entry pre {
+          white-space: pre-wrap;
+          overflow-wrap: anywhere;
+          font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+          .container {
+            padding: 12px;
+          }
+
+          .styled-table th,
+          .styled-table td {
+            padding: 6px;
+            font-size: 12px;
+          }
         }
       `}</style>
-    </div>
+    </main>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <Suspense fallback={<p>Loading dashboard...</p>}>
+      <DashboardContent />
+    </Suspense>
   );
 }
