@@ -11,8 +11,8 @@ const Page = () => {
   });
 
   const [error, setError] = useState("");
-  const [buttontext, setButtonText] = useState("Register");
-
+  const [buttontext, setButtonText] = useState("");
+setButtonText("Register");
   const handleChange = (e) => {
     setFormData({
       ...formData,
