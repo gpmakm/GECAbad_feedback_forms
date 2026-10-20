@@ -13,6 +13,7 @@ const faculty=mongoose.models.faculty || mongoose.model("faculty",facultySchema)
 export  async function POST(request) {
   try {
     const { username, regno, password } = await request.json();
+    
 
     if (mongoose.connection.readyState < 1) {
       await mongoose.connect(process.env.NEXT_PUBLIC_DB_URL);

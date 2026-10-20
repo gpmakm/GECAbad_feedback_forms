@@ -22,13 +22,13 @@ const Page = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  setButtonText("Registering...");
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-    setButtonText("Registering...");
-    fetch("/backend/faculty-registration", {
+
+      fetch("/backend/faculty-registration", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,15 +36,23 @@ const Page = () => {
       body: JSON.stringify(formData),
     })      .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        alert(data.message)
 
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-setButtonText("Register");
+      setButtonText("Register");
+setFormData({
+  fname: "",
+    regno: "",
+    password: "",
+    confirmPassword: ""
+})
     setError("");
-    console.log("Form Data:", formData);
+   
+  
+
   };
 
   return (
