@@ -21,7 +21,7 @@ const Page = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const  handleSubmit = async (e) => {
     //setButtonText("Registering...");
     e.preventDefault();
     setLoading(true);
@@ -31,7 +31,8 @@ const Page = () => {
       return;
     }
 
-      fetch("/backend/faculty-registration", {
+
+      await fetch("/backend/faculty-registration", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -39,6 +40,7 @@ const Page = () => {
       body: JSON.stringify(formData),
     })      .then((response) => response.json())
       .then((data) => {
+        console.log(loading);
         alert(data.message)
 
       })
@@ -54,7 +56,7 @@ setFormData({
 })
     setError("");
     setLoading(false)
-   setButtonText("Register");
+   //setButtonText("Register");
   
 
   };
