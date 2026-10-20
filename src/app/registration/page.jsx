@@ -12,6 +12,7 @@ const Page = () => {
 
   const [error, setError] = useState("");
   const [buttontext, setButtonText] = useState("Register");
+  const [loading,setLoading]=useState(false)
 
   const handleChange = (e) => {
     setFormData({
@@ -23,9 +24,10 @@ const Page = () => {
   const handleSubmit = (e) => {
     //setButtonText("Registering...");
     e.preventDefault();
-  
+    setLoading(true);
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
+      setLoading(false);
       return;
     }
 
@@ -51,6 +53,7 @@ setFormData({
     confirmPassword: ""
 })
     setError("");
+    setLoading(false)
    setButtonText("Register");
   
 
@@ -103,8 +106,10 @@ setFormData({
 
         {error && <p className="faculty-reg-error">{error}</p>}
 
-        <button type="submit" className="faculty-reg-button" onClick={() => setButtonText("Registering...")}>
-          {buttontext}
+        <button type="submit" className="faculty-reg-button">
+          {
+            loading ? "Registering":"Register"
+          }
         </button>
       </form>
     </div>
