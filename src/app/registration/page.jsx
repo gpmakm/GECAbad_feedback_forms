@@ -21,7 +21,7 @@ const Page = () => {
   };
 
   const handleSubmit = (e) => {
-    setButtonText("Registering...");
+    //setButtonText("Registering...");
     e.preventDefault();
   
     if (formData.password !== formData.confirmPassword) {
