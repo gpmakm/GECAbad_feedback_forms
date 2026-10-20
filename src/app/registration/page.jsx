@@ -11,8 +11,8 @@ const Page = () => {
   });
 
   const [error, setError] = useState("");
-  const [buttontext, setButtonText] = useState("");
-setButtonText("Register");
+  const [buttontext, setButtonText] = useState("Register");
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -103,7 +103,7 @@ setFormData({
 
         {error && <p className="faculty-reg-error">{error}</p>}
 
-        <button type="submit" className="faculty-reg-button">
+        <button type="submit" className="faculty-reg-button" onClick={() => setButtonText("Registering...")}>
           {buttontext}
         </button>
       </form>
