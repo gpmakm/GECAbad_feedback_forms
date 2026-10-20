@@ -21,8 +21,9 @@ const Page = () => {
   };
 
   const handleSubmit = (e) => {
+    setButtonText("Registering...");
     e.preventDefault();
-  setButtonText("Registering...");
+  
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -42,7 +43,7 @@ const Page = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
-      setButtonText("Register");
+      
 setFormData({
   fname: "",
     regno: "",
@@ -50,7 +51,7 @@ setFormData({
     confirmPassword: ""
 })
     setError("");
-   
+   setButtonText("Register");
   
 
   };
