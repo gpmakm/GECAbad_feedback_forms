@@ -9,11 +9,13 @@ export default function Login() {
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [buttonText,setButtonText]=useState("Login")
 
   const handleLogin = async (e) => {
     let regno=username;
-
+setButtonText("Logging you in...")
     e.preventDefault()
+    
 
     try {
 
@@ -52,6 +54,7 @@ export default function Login() {
       alert("Login failed")
 
     }
+    setButtonText("Login")
 
   }
 
@@ -120,7 +123,7 @@ export default function Login() {
             cursor: "pointer"
           }}
         >
-          Login
+          {buttonText}
         </button>
         
 
