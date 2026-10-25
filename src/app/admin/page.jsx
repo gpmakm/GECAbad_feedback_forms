@@ -85,7 +85,7 @@ setButtonText("Logging you in...")
         <h2 style={{ textAlign: "center" }}>Admin Login</h2>
 
         <input
-          type="text"
+          type="number"
           placeholder="Enter reg id"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
