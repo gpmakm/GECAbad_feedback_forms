@@ -7,7 +7,7 @@ export default function Login() {
 
   const router = useRouter()
 
-  const [username, setUsername] = useState("")
+  const [username, setUsername] = useState()
   const [password, setPassword] = useState("")
   const [buttonText,setButtonText]=useState("Login")
 
@@ -86,7 +86,7 @@ setButtonText("Logging you in...")
 
         <input
           type="text"
-          placeholder="Enter Username"
+          placeholder="Enter reg id"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
